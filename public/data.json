@@ -1,0 +1,22 @@
+[
+  {
+    "titulo": "Inicio del viaje",
+    "anio": "1998",
+    "descripcion": "Primera computadora familiar y curiosidad por la tecnologia."
+  },
+  {
+    "titulo": "Primer proyecto",
+    "anio": "2006",
+    "descripcion": "Sitio web escolar con HTML y gifs."
+  },
+  {
+    "titulo": "Salto creativo",
+    "anio": "2014",
+    "descripcion": "Exploracion de animacion y audio interactivo."
+  },
+  {
+    "titulo": "Linea de tiempo",
+    "anio": "2024",
+    "descripcion": "Sintesis de hitos y memoria digital."
+  }
+]
