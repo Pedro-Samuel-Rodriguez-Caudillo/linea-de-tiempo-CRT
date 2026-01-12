@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import BootScreen from './BootScreen'
+import BriefingScreen from './BriefingScreen'
 import EventPrompt from './EventPrompt'
 import ExitSequence from './ExitSequence'
 import MinigamePanel from './MinigamePanel'
 import TerminalFrame from './TerminalFrame'
 import TerminalLine from './TerminalLine'
 import VictoryScreen from './VictoryScreen'
-import { BOOT_LINES, MINIGAMES } from './constants'
+import { BOOT_LINES, INSTRUCTION_LINES, MINIGAMES } from './constants'
 import useBootSequence from './hooks/useBootSequence'
 import useFirstInteraction from './hooks/useFirstInteraction'
 import useTimelineData from './hooks/useTimelineData'
@@ -43,10 +44,14 @@ const TerminalApp = () => {
   useFirstInteraction({
     enabled: stage === 'boot' && isReadyForInput,
     onInteract: () => {
-      setStage('prompt')
-      setShowBanner(true)
+      setStage('briefing')
     },
   })
+
+  const handleBriefingComplete = () => {
+    setStage('prompt')
+    setShowBanner(true)
+  }
 
   const currentEvent = events[currentIndex]
   const isLastEvent = currentIndex >= events.length - 1
@@ -147,6 +152,9 @@ const TerminalApp = () => {
       {stage === 'boot' && (
         <BootScreen lines={boot.lines} ready={boot.done} dataStatus={status} onRetry={reload} />
       )}
+      {stage === 'briefing' && (
+        <BriefingScreen lines={INSTRUCTION_LINES} onComplete={handleBriefingComplete} />
+      )}
       {stage === 'prompt' && currentEvent && (
         <EventPrompt
           key={screenKey}
@@ -181,3 +189,4 @@ const TerminalApp = () => {
 }
 
 export default TerminalApp
+

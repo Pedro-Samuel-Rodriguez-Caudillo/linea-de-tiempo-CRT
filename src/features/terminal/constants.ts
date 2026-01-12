@@ -11,6 +11,17 @@ export const BOOT_LINES = [
   'Sistema listo para iniciar',
 ]
 
+export const INSTRUCTION_LINES = [
+  'SISTEMA DE RECUPERACION DE DATOS: ACTIVO',
+  'DETECTADOS EVENTOS HISTORICOS ENCRIPTADOS.',
+  '',
+  'PROTOCOLO DE USUARIO:',
+  '1. ANALIZAR los fragmentos de datos visibles.',
+  '2. EJECUTAR subrutinas de desencriptacion.',
+  '',
+  'INICIANDO INTERFAZ DE NAVEGACION...',
+]
+
 export const BANNER_LINES = [
   '======================================',
   '              papuSO :v               ',

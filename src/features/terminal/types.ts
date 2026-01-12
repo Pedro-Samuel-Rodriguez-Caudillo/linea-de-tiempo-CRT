@@ -24,7 +24,7 @@ export type EncryptedEvent = {
   decryptable: boolean
 }
 
-export type Stage = 'boot' | 'prompt' | 'minigame' | 'exit' | 'victory'
+export type Stage = 'boot' | 'briefing' | 'prompt' | 'minigame' | 'exit' | 'victory'
 
 export type MinigameId =
   | 'asteroids'

@@ -1,6 +1,7 @@
 import { type FormEvent, useState } from 'react'
 import EncryptedEvent from './EncryptedEvent'
 import { BANNER_LINES } from './constants'
+import useArraySequence from './hooks/useArraySequence'
 import useMediaQuery from './hooks/useMediaQuery'
 import TerminalLine from './TerminalLine'
 import TerminalLines from './TerminalLines'
@@ -32,6 +33,14 @@ const EventPrompt = ({
   const isDesktop = useMediaQuery('(min-width: 1024px)')
   const [command, setCommand] = useState('')
   const [feedback, setFeedback] = useState<string | null>(null)
+
+  const { visibleItems: visibleLines, done: isAnimationDone } = useArraySequence(
+    event.lines,
+    {
+      stepDelayMs: 150,
+      initialDelayMs: 300,
+    },
+  )
 
   const normalizeCommand = (value: string) =>
     value
@@ -83,6 +92,9 @@ const EventPrompt = ({
     setFeedback(`Comando no reconocido. Usa: ${availableCommands.join(' / ')}`)
   }
 
+  // Create a partial event for display animation
+  const displayEvent = { ...event, lines: visibleLines }
+
   return (
     <div className="space-y-6">
       <TerminalLine className="flex items-center justify-between text-xs uppercase tracking-[0.35em] text-amber-700">
@@ -98,81 +110,89 @@ const EventPrompt = ({
           lineClassName="whitespace-pre"
         />
       )}
-      <EncryptedEvent event={event} />
-      <div className="space-y-2 text-sm text-amber-100">
-        <TerminalLine>Pregunta: continuar con la línea?</TerminalLine>
-        {isDesktop ? (
-          <div className="space-y-2">
-            <TerminalLine className="text-xs uppercase tracking-[0.3em] text-amber-700">
-              Comandos: {availableCommands.join(' / ')}
-            </TerminalLine>
-            <TerminalLine className="flex items-center gap-2">
-              <span className="text-amber-500">&gt;</span>
-              <form onSubmit={handleSubmit} className="flex-1">
-                <input
-                  value={command}
-                  onChange={(event) => {
-                    setCommand(event.target.value)
-                    setFeedback(null)
-                  }}
-                  autoFocus
-                  autoComplete="off"
-                  spellCheck={false}
-                  className="w-full bg-transparent text-amber-100 placeholder:text-amber-700 focus:outline-none"
-                  placeholder="Escribe un comando y presiona Enter"
-                />
-              </form>
-            </TerminalLine>
-            {feedback && (
-              <TerminalLine className="text-xs text-amber-700">{feedback}</TerminalLine>
-            )}
-            {!canDecrypt && (
-              <TerminalLine className="text-xs text-amber-900">
-                Desencriptar no disponible para este evento.
+      <EncryptedEvent event={displayEvent} />
+      
+      {/* Spacer to push content up, but we want the prompt to appear below the event lines. 
+          The previous request asked for space at the bottom. 
+          The prompt UI should only appear when animation is done. */}
+      {isAnimationDone && (
+        <div className="space-y-2 text-sm text-amber-100 animate-in fade-in duration-500">
+          <TerminalLine>Continuar con la linea de tiempo?</TerminalLine>
+          {isDesktop ? (
+            <div className="space-y-2">
+              <TerminalLine className="text-xs uppercase tracking-[0.3em] text-amber-700">
+                Comandos: {availableCommands.join(' / ')}
               </TerminalLine>
-            )}
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {!isLast && (
+              <TerminalLine className="flex items-center gap-2">
+                <span className="text-amber-500">&gt;</span>
+                <form onSubmit={handleSubmit} className="flex-1">
+                  <input
+                    value={command}
+                    onChange={(event) => {
+                      setCommand(event.target.value)
+                      setFeedback(null)
+                    }}
+                    autoFocus
+                    autoComplete="off"
+                    spellCheck={false}
+                    className="w-full bg-transparent text-amber-100 placeholder:text-amber-700 focus:outline-none"
+                    placeholder="Escribe un comando y presiona Enter"
+                  />
+                </form>
+              </TerminalLine>
+              {feedback && (
+                <TerminalLine className="text-xs text-amber-700">{feedback}</TerminalLine>
+              )}
+              {!canDecrypt && (
+                <TerminalLine className="text-xs text-amber-900">
+                  Desencriptar no disponible para este evento.
+                </TerminalLine>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {!isLast && (
+                <TerminalLine>
+                  <button
+                    type="button"
+                    onClick={onContinue}
+                    className="rounded border border-amber-500/60 px-3 py-1 text-xs uppercase tracking-[0.25em] text-amber-crt transition hover:border-amber-400 hover:text-amber-100"
+                  >
+                    Si (continuar)
+                  </button>
+                </TerminalLine>
+              )}
+              {canDecrypt && (
+                <TerminalLine>
+                  <button
+                    type="button"
+                    onClick={onDecrypt}
+                    className="rounded border border-amber-500/60 px-3 py-1 text-xs uppercase tracking-[0.25em] text-amber-crt transition hover:border-amber-400 hover:text-amber-100"
+                  >
+                    Desencriptar
+                  </button>
+                </TerminalLine>
+              )}
               <TerminalLine>
                 <button
                   type="button"
-                  onClick={onContinue}
-                  className="rounded border border-amber-500/60 px-3 py-1 text-xs uppercase tracking-[0.25em] text-amber-crt transition hover:border-amber-400 hover:text-amber-100"
+                  onClick={onExit}
+                  className="rounded border border-amber-800/60 px-3 py-1 text-xs uppercase tracking-[0.25em] text-amber-700 transition hover:border-amber-600 hover:text-amber-500"
                 >
-                  Si (continuar)
+                  Salir
                 </button>
               </TerminalLine>
-            )}
-            {canDecrypt && (
-              <TerminalLine>
-                <button
-                  type="button"
-                  onClick={onDecrypt}
-                  className="rounded border border-amber-500/60 px-3 py-1 text-xs uppercase tracking-[0.25em] text-amber-crt transition hover:border-amber-400 hover:text-amber-100"
-                >
-                  Desencriptar
-                </button>
-              </TerminalLine>
-            )}
-            <TerminalLine>
-              <button
-                type="button"
-                onClick={onExit}
-                className="rounded border border-amber-800/60 px-3 py-1 text-xs uppercase tracking-[0.25em] text-amber-700 transition hover:border-amber-600 hover:text-amber-500"
-              >
-                Salir
-              </button>
-            </TerminalLine>
-            {!canDecrypt && (
-              <TerminalLine className="text-xs text-amber-900">
-                Desencriptar no disponible para este evento.
-              </TerminalLine>
-            )}
-          </div>
-        )}
-      </div>
+              {!canDecrypt && (
+                <TerminalLine className="text-xs text-amber-900">
+                  Desencriptar no disponible para este evento.
+                </TerminalLine>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+      
+      <div className="h-32" aria-hidden="true" />
     </div>
   )
 }
