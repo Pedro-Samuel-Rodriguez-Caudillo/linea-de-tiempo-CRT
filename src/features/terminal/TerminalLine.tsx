@@ -6,7 +6,7 @@ type TerminalLineProps = PropsWithChildren<{
 }>
 
 const TerminalLine = ({ className = '', children }: TerminalLineProps) => {
-  const classes = ['console-line', className].filter(Boolean).join(' ')
+  const classes = ['console-line', 'break-words', className].filter(Boolean).join(' ')
 
   const content = typeof children === 'string' ? parseFormattedText(children) : children
 

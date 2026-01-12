@@ -1,7 +1,7 @@
 # TODO:
 Esto es una 
 ## Visual
-Monitor CRT con aberraciones cromaticas muy notables y en 3D texto en color blanco y fondo negro.
+Monitor CRT con aberraciones cromáticas muy notables y en 3D texto en color blanco y fondo negro.
 Cada línea se dibuja como una consola antigua.
 
 ## Lógica
@@ -9,7 +9,7 @@ Cada línea se dibuja como una consola antigua.
 2. En primer inicio se hace una simulación de un boot de computadora con datos ficticios `PapuSO`
 3. Usuario espera 3 segundos a que termine la simulación.
 4. En primera interacción se hace se carga:
-    a. Un banner (solo en primera interracción se muestra)
+    a. Un banner (solo en primera interacción se muestra)
     b. Un texto encriptado (*)
     c. Una pregunta con 3 respuestas, Sí (continuar) [Este es default y no se muestra si es el último evento], Desencriptar, Salir.
 
@@ -55,11 +55,9 @@ Es el más natural en consola: jugador @ en la fila inferior (o penúltima) movi
 
 - Space Invaders (arcade rápido)
 
-En consola se ve excelente porque es grid puro. Enemigos como W/M en filas, jugador A o ^ abajo, disparos |, disparos enemigos !. Movimiento de la formación: horizontal en bloque; al tocar pared interna, baja 1 fila y cambia dirección. Barricadas como # con “vida” (se degradan: #→+→.). Puntuación por enemigo y bonus por limpiar oleada. Para velocidad arcade: disminuye el delay del movimiento de la formación conforme quedan menos enemigos (como el original). Simplificación útil: 1 disparo del jugador en pantalla a la vez (clásico), y límite de 2–3 disparos enemigos simultáneos.
+En consola se ve excelente porque es grid puro. ¡Enemigos como W/M en filas, jugador A o ^ abajo, disparos |, disparos enemigos!. Movimiento de la formación: horizontal en bloque; al tocar pared interna, baja 1 fila y cambia dirección. Barricadas como # con “vida” (se degradan: #→+→.). Puntuación por enemigo y bonus por limpiar oleada. Para velocidad arcade: disminuye el delay del movimiento de la formación conforme quedan menos enemigos (como el original). Simplificación útil: 1 disparo del jugador en pantalla a la vez (clásico), y límite de 2–3 disparos enemigos simultáneos.
 
 Si tu “consola” es en navegador (index.html) pero con estética terminal, estas adaptaciones encajan igual: renderizas el grid como texto monoespaciado en un <pre> y capturas teclado con eventos, manteniendo un game loop por requestAnimationFrame o setInterval. Si es terminal real (ncurses), la lógica es idéntica; solo cambia el render/input.
-
-
 
 
 

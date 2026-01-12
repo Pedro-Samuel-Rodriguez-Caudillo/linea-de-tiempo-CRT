@@ -9,7 +9,7 @@ type TerminalLinesProps = {
 const TerminalLines = ({
   lines,
   className = '',
-  lineClassName = 'whitespace-pre',
+  lineClassName = 'whitespace-pre-wrap',
 }: TerminalLinesProps) => {
   return (
     <div className={className}>
