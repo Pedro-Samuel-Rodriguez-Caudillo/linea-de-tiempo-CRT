@@ -1,22 +1,68 @@
 [
   {
-    "titulo": "Inicio del viaje",
-    "anio": "1998",
-    "descripcion": "Primera computadora familiar y curiosidad por la tecnologia."
+    "titulo": "Heráldica y logotipos",
+    "anio": "1095-1291",
+    "descripcion": "Los escudos de armas en escudos, banderas y yelmos funcionaban como identificadores de casas familiares y territorios. Permitían comunicar pertenencia, procedencia y estatus mediante símbolos reconocibles. La lógica es comparable a la de un logotipo: condensar valores, rasgos y estilo de un grupo en una marca visual consistente."
   },
   {
-    "titulo": "Primer proyecto",
-    "anio": "2006",
-    "descripcion": "Sitio web escolar con HTML y gifs."
+    "titulo": "Nace “diseño gráfico”",
+    "anio": "1922",
+    "descripcion": "Se introduce el término “graphic design” para describir el rol profesional de estructurar y gestionar imágenes dentro del diseño editorial e impresión, diferenciándolo de la ejecución técnica. El concepto formaliza una función: dirigir decisiones visuales y composición para comunicar con claridad en medios impresos."
   },
   {
-    "titulo": "Salto creativo",
+    "titulo": "Primeras GUI modernas",
+    "anio": "1981-1982",
+    "descripcion": "Se consolidan interfaces gráficas de usuario con ventanas y elementos visuales, reduciendo la dependencia de memorizar comandos exactos. El cambio desplaza la interacción desde la línea de comandos hacia la manipulación directa, habilitando un campo más amplio para diseño de UI y usabilidad."
+  },
+  {
+    "titulo": "Photoshop inicia como “Display”",
+    "anio": "1987",
+    "descripcion": "Thomas y John Knoll crean un programa que inicia como visor de imágenes en escala de grises para pantallas monocromáticas y evoluciona hacia edición. El proyecto cambia de nombre a Photoshop y se orienta a un producto más completo, abriendo una etapa de herramientas especializadas para trabajo visual."
+  },
+  {
+    "titulo": "Landing page temprana",
+    "anio": "1993",
+    "descripcion": "Se crea una landing page no oficial de MTV con enfoque más visual en una web dominada por texto. En ese contexto, el uso intensivo de imágenes era poco común por tiempos de carga y limitaciones de red. La expansión de sitios web impulsa la necesidad de criterios de diseño para comunicación y navegación."
+  },
+  {
+    "titulo": "Skeuomorphism en UI móvil",
+    "anio": "2007-2008",
+    "descripcion": "El skeuomorphism se consolida como estilo de UI al trasladar metáforas del mundo real a lo digital (p. ej., papelera), buscando reducir fricción cognitiva en usuarios nuevos. Con la normalización del uso de dispositivos, esas metáforas pierden valor: acciones como borrar, guardar o mover archivos se vuelven hábitos, y el realismo deja de ser requisito."
+  },
+  {
+    "titulo": "Surge Dribbble",
+    "anio": "2009",
+    "descripcion": "Se lanza una comunidad para que creativos compartan trabajo y ganen visibilidad. La metáfora del baloncesto (“dribble”) se usa como concepto de interacción y marca. La plataforma se convierte en un punto de encuentro para portafolios y difusión dentro del ecosistema de diseño."
+  },
+  {
+    "titulo": "Flat design en Microsoft",
+    "anio": "2010",
+    "descripcion": "Una interfaz móvil adopta diseño plano y recibe buena aceptación, impulsando su incorporación en sistemas posteriores. El cambio refuerza el giro hacia minimalismo, tipografía y jerarquía visual por encima de texturas y efectos realistas, marcando transición de estilos en UI."
+  },
+  {
+    "titulo": "Aparece Sketch",
+    "anio": "2010",
+    "descripcion": "Se lanza un editor vectorial para macOS orientado a diseño de interfaces. Frente a herramientas generalistas, simplifica flujos típicos de UI y reduce trabajo accesorio, favoreciendo componentes, layout y iteración rápida en pantallas."
+  },
+  {
+    "titulo": "Material Design",
     "anio": "2014",
-    "descripcion": "Exploracion de animacion y audio interactivo."
+    "descripcion": "Se publica un sistema de diseño unificado para productos digitales, basado en elevación, luz y sombras, además de componentes consistentes. Se vuelve referencia para estandarizar patrones de UI en web y mobile, facilitando coherencia visual y comportamiento entre aplicaciones."
   },
   {
-    "titulo": "Linea de tiempo",
-    "anio": "2024",
-    "descripcion": "Sintesis de hitos y memoria digital."
+    "titulo": "Figma en el navegador",
+    "anio": "2016",
+    "descripcion": "Se lanza una herramienta enfocada en diseño de UI con colaboración en tiempo real. La propuesta cambia el flujo de trabajo: edición concurrente, comentarios y coordinación directa entre diseñadores, acelerando iteración y entrega sin depender de archivos locales intercambiados."
+  },
+  {
+    "titulo": "Neumorphism",
+    "anio": "2019",
+    "descripcion": "Se populariza un estilo que busca volumen “suave” mediante sombras y luces sutiles, con elementos que parecen integrados a la superficie del fondo. Su adopción práctica es limitada: tiende a sacrificar contraste y accesibilidad, y exige cuidado visual alto para mantener legibilidad en interfaces reales."
+  },
+  {
+    "titulo": "Glassmorphism",
+    "anio": "2021",
+    "descripcion": "Se impulsa una tendencia basada en transparencias y desenfoque de fondo, emulando vidrio esmerilado. Produce capas visuales atractivas, pero requiere control estricto de contraste y jerarquía para que el contenido siga siendo legible y usable, especialmente en pantallas pequeñas o con fondos complejos."
   }
 ]
+

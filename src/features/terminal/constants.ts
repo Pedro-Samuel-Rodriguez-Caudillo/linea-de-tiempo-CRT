@@ -13,7 +13,7 @@ export const BOOT_LINES = [
 
 export const BANNER_LINES = [
   '======================================',
-  '         PAPUSO TERMINAL v1           ',
+  '              papuSO :v               ',
   '======================================',
 ]
 
@@ -42,5 +42,25 @@ export const MINIGAMES: MinigameDefinition[] = [
     id: 'invaders',
     nombre: 'Space Invaders',
     descripcion: 'Formacion descendente con disparos limitados.',
+  },
+  {
+    id: 'snake',
+    nombre: 'Snake Parser',
+    descripcion: 'Recolecta bits de datos sin chocar con las paredes.',
+  },
+  {
+    id: 'tetris',
+    nombre: 'Tetris Grid',
+    descripcion: 'Ordena bloques de codigo para liberar memoria.',
+  },
+  {
+    id: 'missile',
+    nombre: 'Missile Defense',
+    descripcion: 'Protege la base de datos de ataques orbitales.',
+  },
+  {
+    id: '2048',
+    nombre: 'Binary 2048',
+    descripcion: 'Combina potencias de 2 para optimizar el espacio.',
   },
 ]

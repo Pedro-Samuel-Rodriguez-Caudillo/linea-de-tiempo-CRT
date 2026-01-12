@@ -10,16 +10,16 @@ type BootScreenProps = {
 
 const BootScreen = ({ lines, ready, dataStatus, onRetry }: BootScreenProps) => {
   return (
-    <div className="space-y-2 text-sm text-emerald-100">
-      <TerminalLine className="text-xs uppercase tracking-[0.4em] text-emerald-300">
+    <div className="space-y-2 text-sm text-amber-100">
+      <TerminalLine className="text-xs uppercase tracking-[0.4em] text-amber-600">
         PapuSO
       </TerminalLine>
       <TerminalLines lines={lines} className="space-y-1" />
       {dataStatus === 'loading' && (
-        <TerminalLine className="text-sky-200">Cargando data.json ...</TerminalLine>
+        <TerminalLine className="text-amber-crt">Cargando data.json ...</TerminalLine>
       )}
       {dataStatus === 'error' && (
-        <TerminalLine className="text-amber-200">
+        <TerminalLine className="text-red-500">
           Error al cargar data.json.{' '}
           <button
             type="button"
@@ -31,7 +31,7 @@ const BootScreen = ({ lines, ready, dataStatus, onRetry }: BootScreenProps) => {
         </TerminalLine>
       )}
       {ready && dataStatus === 'ready' && (
-        <TerminalLine className="text-emerald-200">
+        <TerminalLine className="text-amber-crt">
           Presiona cualquier tecla para continuar
           <span className="blink">_</span>
         </TerminalLine>

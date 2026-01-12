@@ -105,7 +105,7 @@ const DodgeGame = ({ onEvent }: DodgeGameProps) => {
   })
 
   return (
-    <div className="rounded-lg border border-slate-800 bg-slate-950/60 p-3 text-emerald-100">
+    <div className="terminal-grid rounded-lg border border-amber-900/40 bg-amber-950/20 p-3 text-amber-crt">
       <TerminalLines
         lines={frame}
         className="space-y-0 font-mono"

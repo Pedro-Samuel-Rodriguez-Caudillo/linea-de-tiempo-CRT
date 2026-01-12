@@ -27,26 +27,26 @@ const MinigamePanel = ({
   }
 
   return (
-    <div className="relative space-y-5 pt-6 text-sm text-slate-200">
-      <div className="absolute right-0 top-0 text-xs uppercase tracking-[0.3em] text-sky-200">
+    <div className="relative space-y-5 pt-6 text-sm text-amber-100">
+      <TerminalLine className="absolute right-0 top-0 text-xs uppercase tracking-[0.3em] text-amber-crt">
         {event.revealedWords} / {event.totalWords} palabras descifradas
-      </div>
+      </TerminalLine>
       <div className="space-y-1">
-        <TerminalLine className="text-emerald-200">
+        <TerminalLine className="text-amber-crt">
           Minijuego activo: {minigame.nombre}
         </TerminalLine>
-        <TerminalLine className="text-slate-300">
+        <TerminalLine className="text-amber-crt-dim">
           {minigame.descripcion}
         </TerminalLine>
       </div>
-      <div className="grid gap-4 rounded-xl border border-slate-800 bg-slate-950/40 p-4">
-        <TerminalLine className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.3em] text-slate-400">
+      <div className="grid gap-4 rounded-xl border border-amber-900/40 bg-amber-950/20 p-4">
+        <TerminalLine className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.3em] text-amber-600">
           <span>Puntos: {minigame.points}</span>
           <span>Meta: {minigame.target}</span>
           <span>Vidas: {minigame.lives}</span>
         </TerminalLine>
         <GameComponent key={minigame.id} onEvent={handleEvent} />
-        <TerminalLine className="text-xs uppercase tracking-[0.3em] text-slate-400">
+        <TerminalLine className="text-xs uppercase tracking-[0.3em] text-amber-600">
           Controles: {controls}
         </TerminalLine>
       </div>

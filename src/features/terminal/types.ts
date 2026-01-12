@@ -12,6 +12,7 @@ export type WordToken = {
 
 export type EncryptedLine = {
   label: string
+  labelTokens: WordToken[]
   tokens: WordToken[]
 }
 
@@ -25,7 +26,16 @@ export type EncryptedEvent = {
 
 export type Stage = 'boot' | 'prompt' | 'minigame' | 'exit' | 'victory'
 
-export type MinigameId = 'asteroids' | 'breakout' | 'pong' | 'dodge' | 'invaders'
+export type MinigameId =
+  | 'asteroids'
+  | 'breakout'
+  | 'pong'
+  | 'dodge'
+  | 'invaders'
+  | 'snake'
+  | 'tetris'
+  | 'missile'
+  | '2048'
 
 export type MinigameDefinition = {
   id: MinigameId

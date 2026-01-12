@@ -19,6 +19,7 @@ const createTokens = (text: string): WordToken[] =>
 
 const createLine = (label: string, text: string): EncryptedLine => ({
   label,
+  labelTokens: createTokens(label),
   tokens: createTokens(text),
 })
 
@@ -27,11 +28,14 @@ export const buildEncryptedEvent = (
   index: number,
 ): EncryptedEvent => {
   const lines = [
-    createLine('Titulo', entry.titulo),
-    createLine('Anio', entry.anio),
-    createLine('Descripcion', entry.descripcion),
+    createLine('Título', entry.titulo),
+    createLine('Año', entry.anio),
+    createLine('Descripción', entry.descripcion),
   ]
-  const totalWords = lines.reduce((acc, line) => acc + line.tokens.length, 0)
+  const totalWords = lines.reduce(
+    (acc, line) => acc + line.labelTokens.length + line.tokens.length,
+    0,
+  )
 
   return {
     id: `evento-${index + 1}`,
@@ -46,21 +50,24 @@ export const buildEncryptedEvents = (entries: TimelineEntry[]) =>
   entries.map((entry, index) => buildEncryptedEvent(entry, index))
 
 export const revealNextWord = (event: EncryptedEvent): EncryptedEvent => {
-  let revealed = false
+  const revealState = { revealed: false }
 
-  const lines = event.lines.map((line) => {
-    const tokens = line.tokens.map((token) => {
-      if (token.revealed || revealed) {
+  const revealTokens = (tokens: WordToken[]) =>
+    tokens.map((token) => {
+      if (token.revealed || revealState.revealed) {
         return token
       }
-      revealed = true
+      revealState.revealed = true
       return { ...token, revealed: true }
     })
 
-    return { ...line, tokens }
-  })
+  const lines = event.lines.map((line) => ({
+    ...line,
+    labelTokens: revealTokens(line.labelTokens),
+    tokens: revealTokens(line.tokens),
+  }))
 
-  if (!revealed) {
+  if (!revealState.revealed) {
     return event
   }
 

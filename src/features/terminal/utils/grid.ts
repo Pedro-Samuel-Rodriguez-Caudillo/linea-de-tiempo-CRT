@@ -19,5 +19,10 @@ export const wrap = (value: number, min: number, max: number) => {
   return value
 }
 
+export const wrappedDistance = (a: number, b: number, size: number) => {
+  const diff = Math.abs(a - b)
+  return Math.min(diff, size - diff)
+}
+
 export const randomInt = (min: number, max: number) =>
   Math.floor(Math.random() * (max - min + 1)) + min

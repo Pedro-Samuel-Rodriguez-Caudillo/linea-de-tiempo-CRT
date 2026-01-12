@@ -2,7 +2,14 @@ import { useMemo } from 'react'
 import useGameLoop from '../hooks/useGameLoop'
 import useKeyControls from '../hooks/useKeyControls'
 import TerminalLines from '../TerminalLines'
-import { createGrid, randomInt, renderGrid, withBorder, wrap } from '../utils/grid'
+import {
+  createGrid,
+  randomInt,
+  renderGrid,
+  withBorder,
+  wrap,
+  wrappedDistance,
+} from '../utils/grid'
 import type { GameResult } from './types'
 
 type Asteroid = {
@@ -126,9 +133,15 @@ const updateState = (
   const remainingBullets: Bullet[] = []
   const destroyed = new Set<number>()
 
+  const isBulletHit = (bullet: Bullet, asteroid: Asteroid) => {
+    const dx = wrappedDistance(bullet.x, asteroid.x, state.width)
+    const dy = wrappedDistance(bullet.y, asteroid.y, state.height)
+    return dx <= 1 && dy <= 1
+  }
+
   bullets.forEach((bullet) => {
     const hitIndex = asteroids.findIndex(
-      (asteroid) => asteroid.x === bullet.x && asteroid.y === bullet.y,
+      (asteroid) => isBulletHit(bullet, asteroid),
     )
     if (hitIndex >= 0) {
       destroyed.add(hitIndex)
@@ -197,7 +210,7 @@ const AsteroidsGame = ({ onEvent }: AsteroidsGameProps) => {
   })
 
   return (
-    <div className="rounded-lg border border-slate-800 bg-slate-950/60 p-3 text-emerald-100">
+    <div className="terminal-grid rounded-lg border border-amber-900/40 bg-amber-950/20 p-3 text-amber-crt">
       <TerminalLines
         lines={frame}
         className="space-y-0 font-mono"

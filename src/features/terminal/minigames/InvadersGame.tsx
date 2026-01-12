@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import useGameLoop from '../hooks/useGameLoop'
 import useKeyControls from '../hooks/useKeyControls'
+import TerminalLines from '../TerminalLines'
 import { clamp, createGrid, randomInt, renderGrid, withBorder } from '../utils/grid'
 import type { GameResult } from './types'
 
@@ -121,9 +122,12 @@ const updateState = (
     enemyBullets.push({ x: shooter.x, y: shooter.y + 1, vy: 1 })
   }
 
+  const isNear = (ax: number, ay: number, bx: number, by: number, radius = 1) =>
+    Math.abs(ax - bx) <= radius && Math.abs(ay - by) <= radius
+
   if (playerBullet) {
-    const hitIndex = enemies.findIndex(
-      (enemy) => enemy.x === playerBullet?.x && enemy.y === playerBullet?.y,
+    const hitIndex = enemies.findIndex((enemy) =>
+      isNear(enemy.x, enemy.y, playerBullet.x, playerBullet.y),
     )
     if (hitIndex >= 0) {
       enemies = enemies.filter((_, index) => index !== hitIndex)
@@ -133,8 +137,8 @@ const updateState = (
   }
 
   const playerY = state.height - 1
-  const hitPlayer = enemyBullets.find(
-    (bullet) => bullet.x === playerX && bullet.y >= playerY,
+  const hitPlayer = enemyBullets.find((bullet) =>
+    isNear(bullet.x, bullet.y, playerX, playerY),
   )
   if (hitPlayer) {
     events.push('lifeLost')
@@ -227,9 +231,13 @@ const InvadersGame = ({ onEvent }: InvadersGameProps) => {
   })
 
   return (
-    <pre className="whitespace-pre rounded-lg border border-slate-800 bg-slate-950/60 p-3 text-emerald-100">
-      {frame.join('\n')}
-    </pre>
+    <div className="terminal-grid rounded-lg border border-amber-900/40 bg-amber-950/20 p-3 text-amber-crt">
+      <TerminalLines
+        lines={frame}
+        className="space-y-0 font-mono"
+        lineClassName="whitespace-pre leading-none"
+      />
+    </div>
   )
 }
 

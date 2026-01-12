@@ -4,6 +4,7 @@ import EventPrompt from './EventPrompt'
 import ExitSequence from './ExitSequence'
 import MinigamePanel from './MinigamePanel'
 import TerminalFrame from './TerminalFrame'
+import TerminalLine from './TerminalLine'
 import VictoryScreen from './VictoryScreen'
 import { BOOT_LINES, MINIGAMES } from './constants'
 import useBootSequence from './hooks/useBootSequence'
@@ -161,8 +162,8 @@ const TerminalApp = () => {
         />
       )}
       {stage === 'prompt' && !currentEvent && (
-        <div className="space-y-2 text-sm text-slate-300">
-          <div className="console-line">data.json sin eventos disponibles.</div>
+        <div className="space-y-2 text-sm text-amber-crt-dim">
+          <TerminalLine>data.json sin eventos disponibles.</TerminalLine>
         </div>
       )}
       {stage === 'minigame' && currentEvent && minigame && (
