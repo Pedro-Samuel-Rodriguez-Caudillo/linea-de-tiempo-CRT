@@ -2,14 +2,7 @@ import { useMemo } from 'react'
 import useGameLoop from '../hooks/useGameLoop'
 import useKeyControls from '../hooks/useKeyControls'
 import TerminalLines from '../TerminalLines'
-import {
-  createGrid,
-  randomInt,
-  renderGrid,
-  withBorder,
-  wrap,
-  wrappedDistance,
-} from '../utils/grid'
+import { createGrid, randomInt, renderGrid, withBorder, wrap } from '../utils/grid'
 import type { GameResult } from './types'
 
 type Asteroid = {
@@ -41,6 +34,7 @@ type AsteroidsState = {
 
 type AsteroidsGameProps = {
   onEvent: (event: 'point' | 'lifeLost') => void
+  externalControls?: any
 }
 
 const WIDTH = 26
@@ -78,7 +72,7 @@ const buildInitialState = (): AsteroidsState => {
 
 const updateState = (
   state: AsteroidsState,
-  controls: ReturnType<typeof useKeyControls>,
+  controls: any,
 ) => {
   const events: Array<'point' | 'lifeLost'> = []
   let { shipX, shipY, dirX, dirY, cooldown } = state
@@ -133,15 +127,9 @@ const updateState = (
   const remainingBullets: Bullet[] = []
   const destroyed = new Set<number>()
 
-  const isBulletHit = (bullet: Bullet, asteroid: Asteroid) => {
-    const dx = wrappedDistance(bullet.x, asteroid.x, state.width)
-    const dy = wrappedDistance(bullet.y, asteroid.y, state.height)
-    return dx <= 1 && dy <= 1
-  }
-
   bullets.forEach((bullet) => {
     const hitIndex = asteroids.findIndex(
-      (asteroid) => isBulletHit(bullet, asteroid),
+      (asteroid) => asteroid.x === bullet.x && asteroid.y === bullet.y,
     )
     if (hitIndex >= 0) {
       destroyed.add(hitIndex)
@@ -197,8 +185,9 @@ const renderState = (state: AsteroidsState) => {
   return withBorder(renderGrid(grid))
 }
 
-const AsteroidsGame = ({ onEvent }: AsteroidsGameProps) => {
-  const controls = useKeyControls()
+const AsteroidsGame = ({ onEvent, externalControls }: AsteroidsGameProps) => {
+  const localControls = useKeyControls()
+  const controls = externalControls || localControls
   const initialState = useMemo(() => buildInitialState(), [])
   const { frame } = useGameLoop({
     initialState,
@@ -206,11 +195,11 @@ const AsteroidsGame = ({ onEvent }: AsteroidsGameProps) => {
     render: renderState,
     controls,
     onEvent,
-    tickMs: 110,
+    tickMs: 90,
   })
 
   return (
-    <div className="terminal-grid rounded-lg border border-amber-900/40 bg-amber-950/20 p-3 text-amber-crt">
+    <div className="rounded-lg border border-amber-900/40 bg-amber-950/20 p-3 text-amber-crt">
       <TerminalLines
         lines={frame}
         className="space-y-0 font-mono"

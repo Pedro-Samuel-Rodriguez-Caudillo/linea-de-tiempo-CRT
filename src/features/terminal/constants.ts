@@ -20,7 +20,7 @@ export const BANNER_LINES = [
 export const MINIGAMES: MinigameDefinition[] = [
   {
     id: 'asteroids',
-    nombre: 'Asteroids ASCII',
+    nombre: 'Asteroids',
     descripcion: 'Arcade rapido con wrap-around y disparos discretos.',
   },
   {

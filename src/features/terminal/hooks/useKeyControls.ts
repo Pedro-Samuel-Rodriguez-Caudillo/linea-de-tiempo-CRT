@@ -73,6 +73,20 @@ const useKeyControls = (options: UseKeyControlsOptions = {}): KeyControls => {
     }
   }, [enabled])
 
+  const triggerDown = useCallback((key: string) => {
+    const normalized = normalizeKey(key)
+    if (!pressed.current.has(normalized)) {
+      pressedOnce.current.add(normalized)
+    }
+    pressed.current.add(normalized)
+  }, [])
+
+  const triggerUp = useCallback((key: string) => {
+    const normalized = normalizeKey(key)
+    pressed.current.delete(normalized)
+    pressedOnce.current.delete(normalized)
+  }, [])
+
   const consume = useCallback((key: string) => {
     const normalized = normalizeKey(key)
     if (!pressedOnce.current.has(normalized)) {
@@ -82,7 +96,12 @@ const useKeyControls = (options: UseKeyControlsOptions = {}): KeyControls => {
     return true
   }, [])
 
-  return useMemo(() => ({ pressed: pressed.current, consume }), [consume])
+  return useMemo(() => ({ 
+    pressed: pressed.current, 
+    consume,
+    triggerDown,
+    triggerUp
+  }), [consume, triggerDown, triggerUp])
 }
 
 export default useKeyControls

@@ -1,6 +1,8 @@
 import TerminalLine from './TerminalLine'
 import type { EncryptedEvent as EncryptedEventType, MinigameState } from './types'
 import { MINIGAME_COMPONENTS, MINIGAME_CONTROLS } from './minigames'
+import useKeyControls from './hooks/useKeyControls'
+import VirtualControls from './VirtualControls'
 
 type MinigamePanelProps = {
   minigame: MinigameState
@@ -15,8 +17,9 @@ const MinigamePanel = ({
   onGainPoint,
   onLoseLife,
 }: MinigamePanelProps) => {
+  const controls = useKeyControls()
   const GameComponent = MINIGAME_COMPONENTS[minigame.id]
-  const controls = MINIGAME_CONTROLS[minigame.id]
+  const controlsDesc = MINIGAME_CONTROLS[minigame.id]
 
   const handleEvent = (eventType: 'point' | 'lifeLost') => {
     if (eventType === 'point') {
@@ -45,11 +48,12 @@ const MinigamePanel = ({
           <span>Meta: {minigame.target}</span>
           <span>Vidas: {minigame.lives}</span>
         </TerminalLine>
-        <GameComponent key={minigame.id} onEvent={handleEvent} />
-        <TerminalLine className="text-xs uppercase tracking-[0.3em] text-amber-600">
-          Controles: {controls}
+        <GameComponent key={minigame.id} onEvent={handleEvent} externalControls={controls} />
+        <TerminalLine className="hidden text-xs uppercase tracking-[0.3em] text-amber-600 md:block">
+          Controles: {controlsDesc}
         </TerminalLine>
       </div>
+      <VirtualControls controls={controls} />
     </div>
   )
 }
