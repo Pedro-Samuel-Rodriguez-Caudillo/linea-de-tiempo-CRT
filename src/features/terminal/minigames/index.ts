@@ -9,9 +9,11 @@ import TetrisGame, { TETRIS_CONTROLS } from './TetrisGame'
 import MissileCommandGame, { MISSILE_CONTROLS } from './MissileCommandGame'
 import TwentyFortyEightGame, { TWENTY_FORTY_EIGHT_CONTROLS } from './TwentyFortyEightGame'
 import type { MinigameId } from '../types'
+import type { KeyControls } from '../hooks/useKeyControls'
 
 type MinigameComponent = ComponentType<{
   onEvent: (event: 'point' | 'lifeLost') => void
+  externalControls?: KeyControls
 }>
 
 export const MINIGAME_COMPONENTS: Record<MinigameId, MinigameComponent> = {

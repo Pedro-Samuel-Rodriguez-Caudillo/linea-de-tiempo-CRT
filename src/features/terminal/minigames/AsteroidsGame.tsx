@@ -1,9 +1,8 @@
 import { useMemo } from 'react'
 import useGameLoop from '../hooks/useGameLoop'
-import useKeyControls from '../hooks/useKeyControls'
+import useKeyControls, { type KeyControls } from '../hooks/useKeyControls'
 import TerminalLines from '../TerminalLines'
 import { createGrid, randomInt, renderGrid, withBorder, wrap } from '../utils/grid'
-import type { GameResult } from './types'
 
 type Asteroid = { x: number; y: number; vx: number; vy: number }
 type Bullet = { x: number; y: number; vx: number; vy: number; life: number }
@@ -20,7 +19,7 @@ type AsteroidsState = {
 
 type AsteroidsGameProps = {
   onEvent: (event: 'point' | 'lifeLost') => void
-  externalControls?: any
+  externalControls?: KeyControls
 }
 
 const WIDTH = 26
@@ -53,7 +52,7 @@ const buildInitialState = (): AsteroidsState => {
   }
 }
 
-const updateState = (state: AsteroidsState, controls: any) => {
+const updateState = (state: AsteroidsState, controls: KeyControls) => {
   const events: Array<'point' | 'lifeLost'> = []
   let { shipX, shipY, cooldown } = state
 

@@ -1,13 +1,10 @@
-import useGsap from '../lib/useGsap'
+import useGsap, { type UseGsapOptions } from '../lib/useGsap'
 import { animateCierre } from './sections/cierre'
 import { animateIntro } from './sections/intro'
 import { animateTimeline } from './sections/timeline'
 import type { AnimationSection } from './types'
 
-type UseSectionAnimationsOptions = {
-  scope?: Parameters<typeof useGsap>[1]['scope']
-  dependencies?: Parameters<typeof useGsap>[1]['dependencies']
-}
+type UseSectionAnimationsOptions = UseGsapOptions
 
 const useSectionAnimations = (
   section: AnimationSection,

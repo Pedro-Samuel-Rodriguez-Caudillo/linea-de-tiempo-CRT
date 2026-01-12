@@ -2,10 +2,9 @@ import type { KeyControls } from './hooks/useKeyControls'
 
 type VirtualControlsProps = {
   controls: KeyControls
-  layout?: 'dpad' | 'wasd' | 'full'
 }
 
-const VirtualControls = ({ controls, layout = 'full' }: VirtualControlsProps) => {
+const VirtualControls = ({ controls }: VirtualControlsProps) => {
   const Button = ({ k, label, className = '' }: { k: string, label: string, className?: string }) => (
     <button
       onMouseDown={() => controls.triggerDown(k)}

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import useGameLoop from '../hooks/useGameLoop'
-import useKeyControls from '../hooks/useKeyControls'
+import useKeyControls, { type KeyControls } from '../hooks/useKeyControls'
 import TerminalLines from '../TerminalLines'
 import { createGrid, renderGrid, withBorder, wrap } from '../utils/grid'
 import type { GameResult } from './types'
@@ -17,7 +17,7 @@ type SnakeState = {
 
 type SnakeGameProps = {
   onEvent: (event: 'point' | 'lifeLost') => void
-  externalControls?: any
+  externalControls?: KeyControls
 }
 
 const WIDTH = 26
@@ -50,7 +50,7 @@ const buildInitialState = (): SnakeState => {
 
 const updateState = (
   state: SnakeState,
-  controls: any,
+  controls: KeyControls,
 ) => {
   const events: Array<'point' | 'lifeLost'> = []
   let { dir, snake, food } = state

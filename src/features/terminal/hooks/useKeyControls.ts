@@ -3,6 +3,8 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 export type KeyControls = {
   pressed: Set<string>
   consume: (key: string) => boolean
+  triggerDown: (key: string) => void
+  triggerUp: (key: string) => void
 }
 
 const normalizeKey = (key: string) => {
@@ -96,12 +98,15 @@ const useKeyControls = (options: UseKeyControlsOptions = {}): KeyControls => {
     return true
   }, [])
 
-  return useMemo(() => ({ 
-    pressed: pressed.current, 
-    consume,
-    triggerDown,
-    triggerUp
-  }), [consume, triggerDown, triggerUp])
+  return useMemo(
+    () => ({
+      pressed: pressed.current,
+      consume,
+      triggerDown,
+      triggerUp,
+    }),
+    [consume, triggerDown, triggerUp],
+  )
 }
 
 export default useKeyControls

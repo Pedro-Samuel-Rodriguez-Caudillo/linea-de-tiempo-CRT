@@ -10,18 +10,10 @@ const useMediaQuery = (query: string) => {
 
     handler()
 
-    if (media.addEventListener) {
-      media.addEventListener('change', handler)
-    } else {
-      media.addListener(handler)
-    }
+    media.addEventListener('change', handler)
 
     return () => {
-      if (media.addEventListener) {
-        media.removeEventListener('change', handler)
-      } else {
-        media.removeListener(handler)
-      }
+      media.removeEventListener('change', handler)
     }
   }, [query])
 

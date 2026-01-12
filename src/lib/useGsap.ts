@@ -4,7 +4,7 @@ import { gsap } from './gsap'
 type GsapCallback = Parameters<typeof gsap.context>[0]
 type GsapScope = Parameters<typeof gsap.context>[1]
 
-type UseGsapOptions = {
+export type UseGsapOptions = {
   scope?: GsapScope
   dependencies?: DependencyList
 }

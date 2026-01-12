@@ -125,9 +125,10 @@ const updateState = (
   const isNear = (ax: number, ay: number, bx: number, by: number, radius = 1) =>
     Math.abs(ax - bx) <= radius && Math.abs(ay - by) <= radius
 
-  if (playerBullet) {
+  const currentBullet = playerBullet
+  if (currentBullet) {
     const hitIndex = enemies.findIndex((enemy) =>
-      isNear(enemy.x, enemy.y, playerBullet.x, playerBullet.y),
+      isNear(enemy.x, enemy.y, currentBullet.x, currentBullet.y),
     )
     if (hitIndex >= 0) {
       enemies = enemies.filter((_, index) => index !== hitIndex)
