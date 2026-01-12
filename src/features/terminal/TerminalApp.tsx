@@ -64,8 +64,8 @@ const TerminalApp = () => {
     setMinigame({
       ...definition,
       points: 0,
-      target: remainingWords,
-      lives: 3,
+      target: Math.min(definition.baseTarget, remainingWords),
+      lives: 5,
     })
     setStage('minigame')
   }

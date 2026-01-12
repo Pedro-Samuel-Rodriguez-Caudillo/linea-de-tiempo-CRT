@@ -105,7 +105,7 @@ const SnakeGame = ({ onEvent, externalControls }: SnakeGameProps) => {
     render: renderState,
     controls,
     onEvent,
-    tickMs: 90,
+    tickMs: 140,
   })
 
   return (

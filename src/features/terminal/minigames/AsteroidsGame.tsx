@@ -5,28 +5,14 @@ import TerminalLines from '../TerminalLines'
 import { createGrid, randomInt, renderGrid, withBorder, wrap } from '../utils/grid'
 import type { GameResult } from './types'
 
-type Asteroid = {
-  x: number
-  y: number
-  vx: number
-  vy: number
-}
-
-type Bullet = {
-  x: number
-  y: number
-  vx: number
-  vy: number
-  life: number
-}
+type Asteroid = { x: number; y: number; vx: number; vy: number }
+type Bullet = { x: number; y: number; vx: number; vy: number; life: number }
 
 type AsteroidsState = {
   width: number
   height: number
   shipX: number
   shipY: number
-  dirX: number
-  dirY: number
   asteroids: Asteroid[]
   bullets: Bullet[]
   cooldown: number
@@ -38,20 +24,19 @@ type AsteroidsGameProps = {
 }
 
 const WIDTH = 26
-const HEIGHT = 12
+const HEIGHT = 10 // Un poco más bajo para mejor visibilidad
 
-export const ASTEROIDS_CONTROLS = 'Flechas o WASD para mover, espacio dispara'
+export const ASTEROIDS_CONTROLS = 'WASD/Flechas para mover, Espacio dispara'
 
 const createAsteroid = (width: number, height: number, shipX: number, shipY: number) => {
   let x = randomInt(0, width - 1)
   let y = randomInt(0, height - 1)
-  if (x === shipX && y === shipY) {
-    x = (x + 3) % width
-    y = (y + 2) % height
+  // Asegurar distancia inicial del jugador
+  if (Math.abs(x - shipX) < 4 && Math.abs(y - shipY) < 4) {
+    x = (x + 8) % width
+    y = (y + 4) % height
   }
-  const vx = randomInt(-1, 1) || 1
-  const vy = randomInt(-1, 1)
-  return { x, y, vx, vy }
+  return { x, y, vx: Math.random() > 0.5 ? 1 : -1, vy: 0 } // Movimiento solo horizontal para facilitar
 }
 
 const buildInitialState = (): AsteroidsState => {
@@ -62,126 +47,60 @@ const buildInitialState = (): AsteroidsState => {
     height: HEIGHT,
     shipX,
     shipY,
-    dirX: 1,
-    dirY: 0,
-    asteroids: Array.from({ length: 4 }, () => createAsteroid(WIDTH, HEIGHT, shipX, shipY)),
+    asteroids: Array.from({ length: 3 }, () => createAsteroid(WIDTH, HEIGHT, shipX, shipY)), // Menos asteroides
     bullets: [],
     cooldown: 0,
   }
 }
 
-const updateState = (
-  state: AsteroidsState,
-  controls: any,
-) => {
+const updateState = (state: AsteroidsState, controls: any) => {
   const events: Array<'point' | 'lifeLost'> = []
-  let { shipX, shipY, dirX, dirY, cooldown } = state
+  let { shipX, shipY, cooldown } = state
 
-  let moveX = 0
-  let moveY = 0
-  if (controls.pressed.has('arrowleft') || controls.pressed.has('a')) moveX -= 1
-  if (controls.pressed.has('arrowright') || controls.pressed.has('d')) moveX += 1
-  if (controls.pressed.has('arrowup') || controls.pressed.has('w')) moveY -= 1
-  if (controls.pressed.has('arrowdown') || controls.pressed.has('s')) moveY += 1
+  if (controls.pressed.has('arrowleft') || controls.pressed.has('a')) shipX = wrap(shipX - 1, 0, state.width - 1)
+  if (controls.pressed.has('arrowright') || controls.pressed.has('d')) shipX = wrap(shipX + 1, 0, state.width - 1)
+  if (controls.pressed.has('arrowup') || controls.pressed.has('w')) shipY = wrap(shipY - 1, 0, state.height - 1)
+  if (controls.pressed.has('arrowdown') || controls.pressed.has('s')) shipY = wrap(shipY + 1, 0, state.height - 1)
 
-  if (moveX !== 0 || moveY !== 0) {
-    dirX = moveX
-    dirY = moveY
-  }
+  if (cooldown > 0) cooldown--
 
-  shipX = wrap(shipX + moveX, 0, state.width - 1)
-  shipY = wrap(shipY + moveY, 0, state.height - 1)
-
-  if (cooldown > 0) {
-    cooldown -= 1
-  }
-
-  const bullets = state.bullets
-    .map((bullet) => ({
-      ...bullet,
-      x: wrap(bullet.x + bullet.vx, 0, state.width - 1),
-      y: wrap(bullet.y + bullet.vy, 0, state.height - 1),
-      life: bullet.life - 1,
-    }))
-    .filter((bullet) => bullet.life > 0)
+  let bullets = state.bullets.map(b => ({ ...b, x: wrap(b.x + b.vx, 0, state.width - 1), life: b.life - 1 })).filter(b => b.life > 0)
 
   if (controls.consume('space') && cooldown === 0) {
-    const fireX = dirX === 0 && dirY === 0 ? 1 : dirX
-    const fireY = dirX === 0 && dirY === 0 ? 0 : dirY
-    bullets.push({
-      x: shipX,
-      y: shipY,
-      vx: fireX,
-      vy: fireY,
-      life: 14,
-    })
-    cooldown = 4
+    bullets.push({ x: shipX, y: shipY, vx: 1, vy: 0, life: 10 })
+    cooldown = 3
   }
 
-  let asteroids = state.asteroids.map((asteroid) => ({
-    ...asteroid,
-    x: wrap(asteroid.x + asteroid.vx, 0, state.width - 1),
-    y: wrap(asteroid.y + asteroid.vy, 0, state.height - 1),
-  }))
+  let asteroids = state.asteroids.map(a => ({ ...a, x: wrap(a.x + a.vx, 0, state.width - 1) }))
 
-  const remainingBullets: Bullet[] = []
   const destroyed = new Set<number>()
-
-  bullets.forEach((bullet) => {
-    const hitIndex = asteroids.findIndex(
-      (asteroid) => asteroid.x === bullet.x && asteroid.y === bullet.y,
-    )
-    if (hitIndex >= 0) {
-      destroyed.add(hitIndex)
+  bullets = bullets.filter(b => {
+    const hit = asteroids.findIndex(a => Math.abs(a.x - b.x) < 1.1 && Math.abs(a.y - b.y) < 1.1)
+    if (hit >= 0) {
+      destroyed.add(hit)
       events.push('point')
-    } else {
-      remainingBullets.push(bullet)
+      return false
     }
+    return true
   })
 
-  asteroids = asteroids.filter((_, index) => !destroyed.has(index))
+  asteroids = asteroids.filter((_, i) => !destroyed.has(i))
+  while (asteroids.length < 3) asteroids.push(createAsteroid(state.width, state.height, shipX, shipY))
 
-  while (asteroids.length < 4) {
-    asteroids.push(createAsteroid(state.width, state.height, shipX, shipY))
-  }
-
-  const collision = asteroids.some(
-    (asteroid) => asteroid.x === shipX && asteroid.y === shipY,
-  )
-  if (collision) {
+  if (asteroids.some(a => Math.floor(a.x) === shipX && Math.floor(a.y) === shipY)) {
     events.push('lifeLost')
     shipX = Math.floor(state.width / 2)
     shipY = Math.floor(state.height / 2)
   }
 
-  return {
-    state: {
-      ...state,
-      shipX,
-      shipY,
-      dirX,
-      dirY,
-      asteroids,
-      bullets: remainingBullets,
-      cooldown,
-    },
-    events,
-  } satisfies GameResult<AsteroidsState>
+  return { state: { ...state, shipX, shipY, asteroids, bullets, cooldown }, events }
 }
 
 const renderState = (state: AsteroidsState) => {
   const grid = createGrid(state.width, state.height, ' ')
-
-  state.asteroids.forEach((asteroid) => {
-    grid[asteroid.y][asteroid.x] = 'O'
-  })
-
-  state.bullets.forEach((bullet) => {
-    grid[bullet.y][bullet.x] = '*'
-  })
-
-  grid[state.shipY][state.shipX] = '^'
-
+  state.asteroids.forEach(a => grid[Math.floor(a.y)][Math.floor(a.x)] = 'X') // Carácter más visible
+  state.bullets.forEach(b => grid[Math.floor(b.y)][Math.floor(b.x)] = '·')
+  grid[state.shipY][state.shipX] = 'A' // Jugador más claro
   return withBorder(renderGrid(grid))
 }
 
@@ -195,16 +114,12 @@ const AsteroidsGame = ({ onEvent, externalControls }: AsteroidsGameProps) => {
     render: renderState,
     controls,
     onEvent,
-    tickMs: 90,
+    tickMs: 120, // Más lento para que sea legible
   })
 
   return (
     <div className="rounded-lg border border-amber-900/40 bg-amber-950/20 p-3 text-amber-crt">
-      <TerminalLines
-        lines={frame}
-        className="space-y-0 font-mono"
-        lineClassName="whitespace-pre leading-none"
-      />
+      <TerminalLines lines={frame} className="space-y-0 font-mono" lineClassName="whitespace-pre leading-none" />
     </div>
   )
 }

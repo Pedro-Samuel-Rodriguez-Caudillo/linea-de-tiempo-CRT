@@ -41,6 +41,7 @@ export type MinigameDefinition = {
   id: MinigameId
   nombre: string
   descripcion: string
+  baseTarget: number
 }
 
 export type MinigameState = MinigameDefinition & {
