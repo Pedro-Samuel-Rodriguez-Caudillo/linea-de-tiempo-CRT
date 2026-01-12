@@ -1,5 +1,6 @@
 import { type FormEvent, useState } from 'react'
 import useMediaQuery from './hooks/useMediaQuery'
+import useSound from './hooks/useSound'
 import TerminalLine from './TerminalLine'
 
 type ExitSequenceProps = {
@@ -10,6 +11,7 @@ const ExitSequence = ({ onRestart }: ExitSequenceProps) => {
   const isDesktop = useMediaQuery('(min-width: 1024px)')
   const [command, setCommand] = useState('')
   const [feedback, setFeedback] = useState<string | null>(null)
+  const { playKeystroke } = useSound()
 
   const normalizeCommand = (value: string) =>
     value
@@ -55,6 +57,7 @@ const ExitSequence = ({ onRestart }: ExitSequenceProps) => {
                   setCommand(event.target.value)
                   setFeedback(null)
                 }}
+                onKeyDown={() => playKeystroke()}
                 autoFocus
                 autoComplete="off"
                 spellCheck={false}

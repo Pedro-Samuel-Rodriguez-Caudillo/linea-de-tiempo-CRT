@@ -11,6 +11,7 @@ import { BOOT_LINES, INSTRUCTION_LINES, MINIGAMES } from './constants'
 import useBootSequence from './hooks/useBootSequence'
 import useFirstInteraction from './hooks/useFirstInteraction'
 import useTimelineData from './hooks/useTimelineData'
+import useSound from './hooks/useSound'
 import { buildEncryptedEvents, isEventComplete, revealNextWord } from './utils/encryption'
 import type { EncryptedEvent, MinigameDefinition, MinigameState, Stage } from './types'
 
@@ -25,6 +26,9 @@ const TerminalApp = () => {
     sequenceKey: bootKey,
   })
   const { data, status, reload } = useTimelineData()
+  const { playBoot, playSuccess, playError, toggleMute } = useSound()
+  const [isMuted, setIsMuted] = useState(false)
+  
   const [events, setEvents] = useState<EncryptedEvent[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [stage, setStage] = useState<Stage>('boot')
@@ -38,6 +42,17 @@ const TerminalApp = () => {
       setCurrentIndex(0)
     }
   }, [data, status])
+
+  // Play boot sound on mount/restart
+  useEffect(() => {
+    if (stage === 'boot') {
+      // Small delay to ensure interaction
+      const timer = setTimeout(() => {
+        playBoot()
+      }, 500)
+      return () => clearTimeout(timer)
+    }
+  }, [stage, playBoot, bootKey])
 
   const isReadyForInput = boot.done && status === 'ready'
 
@@ -94,6 +109,7 @@ const TerminalApp = () => {
 
   const handleGainPoint = () => {
     if (!currentEvent || !minigame) return
+    playSuccess()
     const updatedEvent = revealNextWord(currentEvent)
 
     setEvents((prev) =>
@@ -110,6 +126,7 @@ const TerminalApp = () => {
 
   const handleLoseLife = () => {
     if (!currentEvent || !minigame) return
+    playError()
     const nextLives = minigame.lives - 1
 
     if (nextLives <= 0) {
@@ -147,8 +164,20 @@ const TerminalApp = () => {
     }
   }
 
+  const handleToggleMute = () => {
+    const muted = toggleMute()
+    setIsMuted(muted)
+  }
+
   return (
     <TerminalFrame>
+      <button
+        onClick={handleToggleMute}
+        className="absolute right-4 top-4 z-50 text-xs text-amber-900 hover:text-amber-500 uppercase tracking-widest opacity-50 hover:opacity-100"
+      >
+        [{isMuted ? 'MUTEADO' : 'SONIDO'}]
+      </button>
+
       {stage === 'boot' && (
         <BootScreen lines={boot.lines} ready={boot.done} dataStatus={status} onRetry={reload} />
       )}

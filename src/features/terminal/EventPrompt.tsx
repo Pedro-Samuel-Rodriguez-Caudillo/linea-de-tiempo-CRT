@@ -3,6 +3,7 @@ import EncryptedEvent from './EncryptedEvent'
 import { BANNER_LINES } from './constants'
 import useArraySequence from './hooks/useArraySequence'
 import useMediaQuery from './hooks/useMediaQuery'
+import useSound from './hooks/useSound'
 import TerminalLine from './TerminalLine'
 import TerminalLines from './TerminalLines'
 import type { EncryptedEvent as EncryptedEventType } from './types'
@@ -33,6 +34,7 @@ const EventPrompt = ({
   const isDesktop = useMediaQuery('(min-width: 1024px)')
   const [command, setCommand] = useState('')
   const [feedback, setFeedback] = useState<string | null>(null)
+  const { playKeystroke } = useSound()
 
   const { visibleItems: visibleLines, done: isAnimationDone } = useArraySequence(
     event.lines,
@@ -132,6 +134,7 @@ const EventPrompt = ({
                       setCommand(event.target.value)
                       setFeedback(null)
                     }}
+                    onKeyDown={() => playKeystroke()}
                     autoFocus
                     autoComplete="off"
                     spellCheck={false}
