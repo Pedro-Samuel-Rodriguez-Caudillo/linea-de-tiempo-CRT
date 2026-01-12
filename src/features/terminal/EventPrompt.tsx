@@ -150,13 +150,13 @@ const EventPrompt = ({
               )}
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="flex flex-col gap-3">
               {!isLast && (
                 <TerminalLine>
                   <button
                     type="button"
                     onClick={onContinue}
-                    className="rounded border border-amber-500/60 px-3 py-1 text-xs uppercase tracking-[0.25em] text-amber-crt transition hover:border-amber-400 hover:text-amber-100"
+                    className="w-full whitespace-normal rounded border border-amber-500/60 px-4 py-3 text-center text-xs uppercase tracking-[0.25em] text-amber-crt transition hover:border-amber-400 hover:text-amber-100 active:bg-amber-900/40"
                   >
                     Si (continuar)
                   </button>
@@ -167,7 +167,7 @@ const EventPrompt = ({
                   <button
                     type="button"
                     onClick={onDecrypt}
-                    className="rounded border border-amber-500/60 px-3 py-1 text-xs uppercase tracking-[0.25em] text-amber-crt transition hover:border-amber-400 hover:text-amber-100"
+                    className="w-full whitespace-normal rounded border border-amber-500/60 px-4 py-3 text-center text-xs uppercase tracking-[0.25em] text-amber-crt transition hover:border-amber-400 hover:text-amber-100 active:bg-amber-900/40"
                   >
                     Desencriptar
                   </button>
@@ -177,13 +177,13 @@ const EventPrompt = ({
                 <button
                   type="button"
                   onClick={onExit}
-                  className="rounded border border-amber-800/60 px-3 py-1 text-xs uppercase tracking-[0.25em] text-amber-700 transition hover:border-amber-600 hover:text-amber-500"
+                  className="w-full whitespace-normal rounded border border-amber-800/60 px-4 py-3 text-center text-xs uppercase tracking-[0.25em] text-amber-700 transition hover:border-amber-600 hover:text-amber-500 active:bg-amber-900/20"
                 >
                   Salir
                 </button>
               </TerminalLine>
               {!canDecrypt && (
-                <TerminalLine className="text-xs text-amber-900">
+                <TerminalLine className="text-center text-xs text-amber-900">
                   Desencriptar no disponible para este evento.
                 </TerminalLine>
               )}

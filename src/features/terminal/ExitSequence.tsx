@@ -72,7 +72,7 @@ const ExitSequence = ({ onRestart }: ExitSequenceProps) => {
           <button
             type="button"
             onClick={onRestart}
-            className="rounded border border-amber-400/60 px-3 py-1 text-xs uppercase tracking-[0.25em] text-amber-200 transition hover:border-amber-200 hover:text-amber-100"
+            className="w-full whitespace-normal rounded border border-amber-400/60 px-4 py-3 text-center text-xs uppercase tracking-[0.25em] text-amber-200 transition hover:border-amber-200 hover:text-amber-100 active:bg-amber-900/40"
           >
             Reiniciar
           </button>
