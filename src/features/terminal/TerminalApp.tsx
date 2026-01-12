@@ -69,7 +69,7 @@ const TerminalApp = () => {
     setMinigame({
       ...definition,
       points: 0,
-      target: Math.min(definition.baseTarget, remainingWords),
+      target: remainingWords, // Target is now all remaining words
       lives: 5,
     })
     setStage('minigame')
@@ -103,7 +103,7 @@ const TerminalApp = () => {
     const nextPoints = minigame.points + 1
     setMinigame({ ...minigame, points: nextPoints })
 
-    if (isEventComplete(updatedEvent) || nextPoints >= minigame.target) {
+    if (isEventComplete(updatedEvent)) {
       setStage('victory')
     }
   }
