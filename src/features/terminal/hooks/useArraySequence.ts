@@ -16,14 +16,11 @@ export const useArraySequence = <T>(
 ): SequenceState<T> => {
   const { stepDelayMs = 100, initialDelayMs = 0 } = options
   const [visibleCount, setVisibleCount] = useState(0)
-  const [done, setDone] = useState(false)
 
   useEffect(() => {
     setVisibleCount(0)
-    setDone(false)
 
     if (items.length === 0) {
-      setDone(true)
       return
     }
 
@@ -41,13 +38,6 @@ export const useArraySequence = <T>(
         }, index * stepDelayMs)
         timeouts.push(timer)
       })
-
-      // Completion timer
-      const doneTimer = window.setTimeout(() => {
-        if (!active) return
-        setDone(true)
-      }, items.length * stepDelayMs)
-      timeouts.push(doneTimer)
 
     }, initialDelayMs)
     
