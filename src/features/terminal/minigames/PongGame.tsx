@@ -22,8 +22,8 @@ type PongGameProps = {
   onEvent: (event: 'point' | 'lifeLost') => void
 }
 
-const WIDTH = 28
-const HEIGHT = 12
+const WIDTH = 60
+const HEIGHT = 24
 
 export const PONG_CONTROLS = 'W/S o Flechas arriba/abajo'
 

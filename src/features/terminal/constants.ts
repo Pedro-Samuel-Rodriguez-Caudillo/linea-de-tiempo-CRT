@@ -31,8 +31,8 @@ export const BANNER_LINES = [
 export const MINIGAMES: MinigameDefinition[] = [
   {
     id: 'asteroids',
-    nombre: 'Asteroids ASCII',
-    descripcion: 'Arcade rapido con wrap-around y disparos discretos.',
+    nombre: 'Asteroids',
+    descripcion: 'Dipara a esos meteoros.',
     baseTarget: 12,
   },
   {
@@ -44,7 +44,7 @@ export const MINIGAMES: MinigameDefinition[] = [
   {
     id: 'pong',
     nombre: 'Pong',
-    descripcion: 'Paletas verticales con rebote por zona.',
+    descripcion: 'No permitas que llegue a tu zona.',
     baseTarget: 15,
   },
   {
@@ -67,7 +67,7 @@ export const MINIGAMES: MinigameDefinition[] = [
   },
   {
     id: 'tetris',
-    nombre: 'Tetris Grid',
+    nombre: 'Tetris',
     descripcion: 'Ordena bloques de codigo para liberar memoria.',
     baseTarget: 4,
   },
@@ -79,7 +79,7 @@ export const MINIGAMES: MinigameDefinition[] = [
   },
   {
     id: '2048',
-    nombre: 'Binary 2048',
+    nombre: '2048',
     descripcion: 'Combina potencias de 2 para optimizar el espacio.',
     baseTarget: 20,
   },

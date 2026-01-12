@@ -22,8 +22,8 @@ type AsteroidsGameProps = {
   externalControls?: KeyControls
 }
 
-const WIDTH = 26
-const HEIGHT = 10 // Un poco más bajo para mejor visibilidad
+const WIDTH = 60
+const HEIGHT = 24 // Un poco más bajo para mejor visibilidad
 
 export const ASTEROIDS_CONTROLS = 'WASD/Flechas para mover, Espacio dispara'
 
@@ -46,7 +46,7 @@ const buildInitialState = (): AsteroidsState => {
     height: HEIGHT,
     shipX,
     shipY,
-    asteroids: Array.from({ length: 3 }, () => createAsteroid(WIDTH, HEIGHT, shipX, shipY)), // Menos asteroides
+    asteroids: Array.from({ length: 6 }, () => createAsteroid(WIDTH, HEIGHT, shipX, shipY)), // Menos asteroides
     bullets: [],
     cooldown: 0,
   }
@@ -97,9 +97,9 @@ const updateState = (state: AsteroidsState, controls: KeyControls) => {
 
 const renderState = (state: AsteroidsState) => {
   const grid = createGrid(state.width, state.height, ' ')
-  state.asteroids.forEach(a => grid[Math.floor(a.y)][Math.floor(a.x)] = 'X') // Carácter más visible
+  state.asteroids.forEach(a => grid[Math.floor(a.y)][Math.floor(a.x)] = '[E]X') // Carácter más visible con efecto
   state.bullets.forEach(b => grid[Math.floor(b.y)][Math.floor(b.x)] = '·')
-  grid[state.shipY][state.shipX] = 'A' // Jugador más claro
+  grid[state.shipY][state.shipX] = '[P]A' // Jugador con efecto
   return withBorder(renderGrid(grid))
 }
 

@@ -23,8 +23,8 @@ type DodgeGameProps = {
   onEvent: (event: 'point' | 'lifeLost') => void
 }
 
-const WIDTH = 22
-const HEIGHT = 12
+const WIDTH = 40
+const HEIGHT = 24
 
 export const DODGE_CONTROLS = 'Flechas o A/D para mover'
 

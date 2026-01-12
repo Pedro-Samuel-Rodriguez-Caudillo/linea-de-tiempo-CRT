@@ -21,8 +21,8 @@ type MissileGameProps = {
   onEvent: (event: 'point' | 'lifeLost') => void
 }
 
-const WIDTH = 26
-const HEIGHT = 12
+const WIDTH = 50
+const HEIGHT = 24
 
 export const MISSILE_CONTROLS = 'Flechas: mover cursor, Espacio: disparar'
 

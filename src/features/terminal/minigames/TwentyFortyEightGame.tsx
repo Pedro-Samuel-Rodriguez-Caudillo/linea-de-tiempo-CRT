@@ -15,6 +15,8 @@ type TwentyFortyEightProps = {
 }
 
 const SIZE = 4
+const WIDTH = 60
+const HEIGHT = 24
 export const TWENTY_FORTY_EIGHT_CONTROLS = 'WASD o Flechas para deslizar'
 
 const addTile = (grid: number[][]) => {
@@ -107,20 +109,26 @@ const updateState = (
 }
 
 const renderState = (state: TwentyFortyEightState) => {
-  const grid = createGrid(26, 12, ' ')
+  const grid = createGrid(WIDTH, HEIGHT, ' ')
   
-  // Render 4x4 grid in the center
-  const startR = 2
-  const startC = 5
+  // Render 4x4 grid in the center with larger spacing
+  const cellW = 8
+  const cellH = 4
+  const startR = Math.floor((HEIGHT - SIZE * cellH) / 2)
+  const startC = Math.floor((WIDTH - SIZE * cellW) / 2)
 
   for (let r = 0; r < SIZE; r++) {
     for (let c = 0; c < SIZE; c++) {
       const val = state.grid[r][c]
       const str = val === 0 ? '.' : val.toString()
-      const x = startC + c * 4
-      const y = startR + r * 2
+      
+      const x = startC + c * cellW + Math.floor((cellW - str.length) / 2)
+      const y = startR + r * cellH + Math.floor(cellH / 2)
+      
+      // Draw box corners/borders optionally or just the number
+      // Let's draw the number centered
       str.split('').forEach((char, i) => {
-        if (x + i < 26) grid[y][x + i] = char
+        if (x + i < WIDTH && y < HEIGHT) grid[y][x + i] = char
       })
     }
   }

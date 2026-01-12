@@ -20,8 +20,8 @@ type SnakeGameProps = {
   externalControls?: KeyControls
 }
 
-const WIDTH = 26
-const HEIGHT = 12
+const WIDTH = 50
+const HEIGHT = 24
 
 export const SNAKE_CONTROLS = 'WASD o Flechas para mover'
 

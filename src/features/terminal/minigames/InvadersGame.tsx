@@ -32,15 +32,15 @@ type InvadersGameProps = {
   onEvent: (event: 'point' | 'lifeLost') => void
 }
 
-const WIDTH = 26
-const HEIGHT = 14
+const WIDTH = 50
+const HEIGHT = 24
 const ENEMY_STEP = 3
 
 export const INVADERS_CONTROLS = 'Flechas o A/D para mover, espacio dispara'
 
 const createEnemies = (width: number) => {
-  const cols = 8
-  const rows = 3
+  const cols = 12
+  const rows = 4
   const spacing = 2
   const offsetX = Math.floor((width - cols * spacing) / 2)
   const enemies: Invader[] = []
@@ -200,7 +200,7 @@ const renderState = (state: InvadersState) => {
 
   state.enemies.forEach((enemy) => {
     if (enemy.y >= 0 && enemy.y < state.height) {
-      grid[enemy.y][enemy.x] = 'W'
+      grid[enemy.y][enemy.x] = '[E]W'
     }
   })
 
@@ -210,11 +210,11 @@ const renderState = (state: InvadersState) => {
 
   state.enemyBullets.forEach((bullet) => {
     if (bullet.y >= 0 && bullet.y < state.height) {
-      grid[bullet.y][bullet.x] = '!'
+      grid[bullet.y][bullet.x] = '[E]!'
     }
   })
 
-  grid[state.height - 1][state.playerX] = 'A'
+  grid[state.height - 1][state.playerX] = '[P]A'
 
   return withBorder(renderGrid(grid))
 }

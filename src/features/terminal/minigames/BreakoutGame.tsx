@@ -22,9 +22,9 @@ type BreakoutGameProps = {
   onEvent: (event: 'point' | 'lifeLost') => void
 }
 
-const WIDTH = 24
-const HEIGHT = 12
-const BLOCK_ROWS = 3
+const WIDTH = 50
+const HEIGHT = 24
+const BLOCK_ROWS = 5
 const BLOCK_START_Y = 1
 
 export const BREAKOUT_CONTROLS = 'Flechas o A/D para mover'

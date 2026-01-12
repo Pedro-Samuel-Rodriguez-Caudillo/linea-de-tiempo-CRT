@@ -2,7 +2,7 @@
 Esto es una 
 ## Visual
 Monitor CRT con aberraciones cromaticas muy notables y en 3D texto en color blanco y fondo negro.
-Cada linea se dibuja como una consola antigua.
+Cada línea se dibuja como una consola antigua.
 
 ## Lógica
 1. Usuario entra a index.html
@@ -11,27 +11,26 @@ Cada linea se dibuja como una consola antigua.
 4. En primera interacción se hace se carga:
     a. Un banner (solo en primera interracción se muestra)
     b. Un texto encriptado (*)
-    c. Una pregunta con 3 respuestas, Sí (continuar) [Este es default y no se muestra si es el ultimo evento], Desencriptar, Salir.
+    c. Una pregunta con 3 respuestas, Sí (continuar) [Este es default y no se muestra si es el último evento], Desencriptar, Salir.
 
 | Paso | Sí (continuar) | Desencriptar | Salir |
 | 5 | Se muestra el siguiente texto encriptado en formato a. Un texto encriptado(*) b. pregunta | Se inicia un minijuego de la lista de Minijuegos  | Inicia Operación de salida de SO |
 | 6 | ... | Al conseguir un punto se desencripta una letra | ... |
 | 7 | ... | Si se pierde antes de que se desencripte todo el texto se sale del juego y no desencripta una palabra más (no da ya la opcion de desencriptar) | ... |
-| 8 | ... | Si se desencriptan todas las palabras sale una pantalla de ganaste, se limpia la pantalla y regresa a punto 5 | ... |
+| 8 | ... | Si se desencriptan todas las palabras sale una pantalla de `ganaste`, se limpia la pantalla y regresa a punto 5 | ... |
 
 
-### Lógica texto encriptado (*)
-Recoje de data.json en formato:
+### Lógica del texto encriptado (*)
+Recoje de `data.json` en formato:
 {
     titulo: "",
     anio: "",
-    descripcion: "",
-
+    descripcion: ""
 }
 Encripta todo por palabras en binario.
 
 ## Minujuegos
- Se eligira aleatoriamente uno de estos, cada punto es una palabra más decifradas y en la esquina superior derecha se viene un texto de  X / Y Palabras descifradas.
+ Se eligirá aleatoriamente uno de estos, cada punto es una palabra más decifradas y en la esquina superior derecha se viene un texto de  X / Y Palabras descifradas.
  Se sale al:
  a. ganar suficientes puntos para descrifrar suficientes puntos para descifrar todas las palabras.
  b. Perder todas las vidas (en tal caso solo se descifran las palabras alcanzadas).
