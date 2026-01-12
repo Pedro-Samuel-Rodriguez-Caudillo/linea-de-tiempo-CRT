@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import TerminalLine from './TerminalLine'
 import type { EncryptedEvent as EncryptedEventType, MinigameState } from './types'
 import { MINIGAME_COMPONENTS, MINIGAME_CONTROLS } from './minigames'
@@ -19,8 +19,6 @@ const MinigamePanel = ({
   onLoseLife,
 }: MinigamePanelProps) => {
   const [showIntro, setShowIntro] = useState(true)
-  const [scale, setScale] = useState(1)
-  const containerRef = useRef<HTMLDivElement>(null)
   const controls = useKeyControls()
   const GameComponent = MINIGAME_COMPONENTS[minigame.id]
   const controlsDesc = MINIGAME_CONTROLS[minigame.id]
@@ -30,24 +28,6 @@ const MinigamePanel = ({
       setShowIntro(false)
     }, 2500)
     return () => clearTimeout(timer)
-  }, [])
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (!containerRef.current) return
-      const availableWidth = window.innerWidth - 32 // Approximate padding
-      const targetWidth = 500 // Assumed base width for "comfortable" gaming
-      
-      if (availableWidth < targetWidth) {
-        setScale(availableWidth / targetWidth)
-      } else {
-        setScale(1)
-      }
-    }
-
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   const handleEvent = (eventType: 'point' | 'lifeLost') => {
@@ -90,8 +70,7 @@ const MinigamePanel = ({
         </TerminalLine>
       </div>
       <div 
-        ref={containerRef}
-        className="grid gap-4 rounded-xl border border-amber-900/40 bg-amber-950/20 p-4 transition-all duration-300"
+        className="grid gap-4 rounded-xl border border-amber-900/40 bg-amber-950/20 p-2 sm:p-4 transition-all duration-300"
       >
         <TerminalLine className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.3em] text-amber-600">
           <span>Puntos: {minigame.points}</span>
@@ -99,14 +78,11 @@ const MinigamePanel = ({
           <span>Vidas: {minigame.lives}</span>
         </TerminalLine>
         
-        <div 
-          className="flex justify-center origin-top-left sm:origin-center"
-          style={{ 
-            transform: `scale(${scale})`,
-            marginBottom: scale < 1 ? `-${(1 - scale) * 200}px` : '0' // Negative margin to reduce gap from scaling
-          }}
-        >
-          <GameComponent key={minigame.id} onEvent={handleEvent} externalControls={controls} />
+        <div className="flex justify-center overflow-hidden">
+          {/* Responsive container: 1.7vw ensures 60 chars fit in 100vw approx */}
+          <div className="text-[clamp(0.5rem,1.7vw,1rem)] leading-none sm:text-base">
+            <GameComponent key={minigame.id} onEvent={handleEvent} externalControls={controls} />
+          </div>
         </div>
 
         <TerminalLine className="hidden text-xs uppercase tracking-[0.3em] text-amber-600 md:block">
