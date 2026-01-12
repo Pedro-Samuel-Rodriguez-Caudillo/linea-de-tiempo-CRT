@@ -25,8 +25,17 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
+      - name: Prepare TS cache
+        run: mkdir -p .tsbuildinfo
+      - name: Cache TS build info
+        uses: actions/cache@v4
+        with:
+          path: .tsbuildinfo
+          key: ${{ runner.os }}-tsbuildinfo-${{ hashFiles('tsconfig*.json', 'package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-tsbuildinfo-
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --prefer-offline --no-audit --no-fund
       - name: Build
         run: npm run build
       - name: Configure Pages
