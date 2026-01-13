@@ -4,6 +4,7 @@ class SoundSynth {
   private masterGain: GainNode | null = null;
   private humOscillator: OscillatorNode | null = null;
   private isMuted: boolean = false;
+  private baseVolume: number = 0.35;
 
   constructor() {
     // Inicializar perezosamente para cumplir con politicas de navegadores
@@ -18,7 +19,7 @@ class SoundSynth {
 
     this.context = new AudioContext();
     this.masterGain = this.context.createGain();
-    this.masterGain.gain.value = 0.3; // Volumen global seguro
+    this.masterGain.gain.value = this.baseVolume; // Volumen global seguro
     this.masterGain.connect(this.context.destination);
   }
 
@@ -26,7 +27,7 @@ class SoundSynth {
     this.isMuted = !this.isMuted;
     if (this.masterGain) {
       this.masterGain.gain.setTargetAtTime(
-        this.isMuted ? 0 : 0.3,
+        this.isMuted ? 0 : this.baseVolume,
         this.context?.currentTime || 0,
         0.1
       );

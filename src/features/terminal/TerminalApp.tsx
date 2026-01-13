@@ -7,12 +7,12 @@ import MinigamePanel from './MinigamePanel'
 import TerminalFrame from './TerminalFrame'
 import TerminalLine from './TerminalLine'
 import VictoryScreen from './VictoryScreen'
-import { BOOT_LINES, INSTRUCTION_LINES, MINIGAMES } from './constants'
+import { BOOT_LINES, INSTRUCTION_LINES, MINIGAMES, getWordsPerPoint } from './constants'
 import useBootSequence from './hooks/useBootSequence'
 import useFirstInteraction from './hooks/useFirstInteraction'
 import useTimelineData from './hooks/useTimelineData'
 import useSound from './hooks/useSound'
-import { buildEncryptedEvents, isEventComplete, revealNextWord } from './utils/encryption'
+import { buildEncryptedEvents, isEventComplete, revealWords } from './utils/encryption'
 import type { EncryptedEvent, MinigameDefinition, MinigameState, Stage } from './types'
 
 const pickMinigame = (list: MinigameDefinition[]) =>
@@ -80,11 +80,12 @@ const TerminalApp = () => {
     const remainingWords = currentEvent.totalWords - currentEvent.revealedWords
     if (remainingWords <= 0) return
     const definition = pickMinigame(MINIGAMES)
+    const wordsPerPoint = getWordsPerPoint(definition.baseTarget)
 
     setMinigame({
       ...definition,
       points: 0,
-      target: remainingWords, // Target is now all remaining words
+      target: Math.ceil(remainingWords / wordsPerPoint),
       lives: 5,
     })
     setStage('minigame')
@@ -108,20 +109,22 @@ const TerminalApp = () => {
   }
 
   const handleGainPoint = () => {
-    if (!currentEvent || !minigame) return
+    if (!minigame) return
     playSuccess()
-    const updatedEvent = revealNextWord(currentEvent)
+    const wordsPerPoint = getWordsPerPoint(minigame.baseTarget)
 
-    setEvents((prev) =>
-      prev.map((event, index) => (index === currentIndex ? updatedEvent : event)),
-    )
+    setEvents((prev) => {
+      const nextEvents = prev.map((event, index) =>
+        index === currentIndex ? revealWords(event, wordsPerPoint) : event,
+      )
+      const updatedEvent = nextEvents[currentIndex]
+      if (updatedEvent && isEventComplete(updatedEvent)) {
+        setStage('victory')
+      }
+      return nextEvents
+    })
 
-    const nextPoints = minigame.points + 1
-    setMinigame({ ...minigame, points: nextPoints })
-
-    if (isEventComplete(updatedEvent)) {
-      setStage('victory')
-    }
+    setMinigame((prev) => (prev ? { ...prev, points: prev.points + 1 } : prev))
   }
 
   const handleLoseLife = () => {
@@ -218,4 +221,3 @@ const TerminalApp = () => {
 }
 
 export default TerminalApp
-

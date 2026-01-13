@@ -153,7 +153,7 @@ const PongGame = ({ onEvent }: PongGameProps) => {
     render: renderState,
     controls,
     onEvent,
-    tickMs: 90,
+    tickMs: 60,
   })
 
   return (

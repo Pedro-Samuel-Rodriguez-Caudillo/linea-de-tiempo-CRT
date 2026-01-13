@@ -23,7 +23,7 @@ type InvadersState = {
   enemies: Invader[]
   dir: 1 | -1
   step: number
-  playerBullet: Bullet | null
+  playerBullets: Bullet[]
   enemyBullets: Bullet[]
   cooldown: number
 }
@@ -35,6 +35,8 @@ type InvadersGameProps = {
 const WIDTH = 50
 const HEIGHT = 24
 const ENEMY_STEP = 3
+const PLAYER_COOLDOWN = 3
+const MAX_PLAYER_BULLETS = 3
 
 export const INVADERS_CONTROLS = 'Flechas o A/D para mover, espacio dispara'
 
@@ -64,7 +66,7 @@ const buildInitialState = (): InvadersState => ({
   enemies: createEnemies(WIDTH),
   dir: 1,
   step: 0,
-  playerBullet: null,
+  playerBullets: [],
   enemyBullets: [],
   cooldown: 0,
 })
@@ -74,7 +76,7 @@ const updateState = (
   controls: ReturnType<typeof useKeyControls>,
 ) => {
   const events: Array<'point' | 'lifeLost'> = []
-  let { playerX, dir, step, enemies, playerBullet, enemyBullets, cooldown } = state
+  let { playerX, dir, step, enemies, playerBullets, enemyBullets, cooldown } = state
 
   if (controls.pressed.has('arrowleft') || controls.pressed.has('a')) {
     playerX -= 1
@@ -88,9 +90,9 @@ const updateState = (
     cooldown -= 1
   }
 
-  if (controls.consume('space') && cooldown === 0 && !playerBullet) {
-    playerBullet = { x: playerX, y: state.height - 2, vy: -1 }
-    cooldown = 4
+  if (controls.consume('space') && cooldown === 0 && playerBullets.length < MAX_PLAYER_BULLETS) {
+    playerBullets = [...playerBullets, { x: playerX, y: state.height - 2, vy: -1 }]
+    cooldown = PLAYER_COOLDOWN
   }
 
   if (step % ENEMY_STEP === 0) {
@@ -106,12 +108,9 @@ const updateState = (
   }
   step += 1
 
-  if (playerBullet) {
-    playerBullet = { ...playerBullet, y: playerBullet.y + playerBullet.vy }
-    if (playerBullet.y < 0) {
-      playerBullet = null
-    }
-  }
+  playerBullets = playerBullets
+    .map((bullet) => ({ ...bullet, y: bullet.y + bullet.vy }))
+    .filter((bullet) => bullet.y >= 0)
 
   enemyBullets = enemyBullets
     .map((bullet) => ({ ...bullet, y: bullet.y + bullet.vy }))
@@ -125,17 +124,28 @@ const updateState = (
   const isNear = (ax: number, ay: number, bx: number, by: number, radius = 1) =>
     Math.abs(ax - bx) <= radius && Math.abs(ay - by) <= radius
 
-  const currentBullet = playerBullet
-  if (currentBullet) {
+  const hitEnemies = new Set<number>()
+  const remainingBullets: Bullet[] = []
+
+  playerBullets.forEach((bullet) => {
     const hitIndex = enemies.findIndex((enemy) =>
-      isNear(enemy.x, enemy.y, currentBullet.x, currentBullet.y),
+      isNear(enemy.x, enemy.y, bullet.x, bullet.y),
     )
     if (hitIndex >= 0) {
-      enemies = enemies.filter((_, index) => index !== hitIndex)
-      playerBullet = null
+      hitEnemies.add(hitIndex)
+    } else {
+      remainingBullets.push(bullet)
+    }
+  })
+
+  if (hitEnemies.size > 0) {
+    enemies = enemies.filter((_, index) => !hitEnemies.has(index))
+    for (let i = 0; i < hitEnemies.size; i += 1) {
       events.push('point')
     }
   }
+
+  playerBullets = remainingBullets
 
   const playerY = state.height - 1
   const hitPlayer = enemyBullets.find((bullet) =>
@@ -150,7 +160,7 @@ const updateState = (
         enemies: createEnemies(state.width),
         dir,
         step,
-        playerBullet: null,
+        playerBullets: [],
         enemyBullets: [],
         cooldown,
       },
@@ -168,7 +178,7 @@ const updateState = (
         enemies: createEnemies(state.width),
         dir,
         step,
-        playerBullet: null,
+        playerBullets: [],
         enemyBullets: [],
         cooldown,
       },
@@ -187,7 +197,7 @@ const updateState = (
       dir,
       step,
       enemies,
-      playerBullet,
+      playerBullets,
       enemyBullets,
       cooldown,
     },
@@ -204,9 +214,11 @@ const renderState = (state: InvadersState) => {
     }
   })
 
-  if (state.playerBullet) {
-    grid[state.playerBullet.y][state.playerBullet.x] = '|'
-  }
+  state.playerBullets.forEach((bullet) => {
+    if (bullet.y >= 0 && bullet.y < state.height) {
+      grid[bullet.y][bullet.x] = '|'
+    }
+  })
 
   state.enemyBullets.forEach((bullet) => {
     if (bullet.y >= 0 && bullet.y < state.height) {

@@ -78,5 +78,19 @@ export const revealNextWord = (event: EncryptedEvent): EncryptedEvent => {
   }
 }
 
+export const revealWords = (event: EncryptedEvent, count: number): EncryptedEvent => {
+  if (count <= 0 || event.revealedWords >= event.totalWords) return event
+
+  let updatedEvent = event
+  for (let i = 0; i < count; i += 1) {
+    const nextEvent = revealNextWord(updatedEvent)
+    if (nextEvent === updatedEvent) break
+    updatedEvent = nextEvent
+    if (updatedEvent.revealedWords >= updatedEvent.totalWords) break
+  }
+
+  return updatedEvent
+}
+
 export const isEventComplete = (event: EncryptedEvent) =>
   event.revealedWords >= event.totalWords
